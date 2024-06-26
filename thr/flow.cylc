@@ -1,0 +1,18 @@
+[scheduling]
+    cycling mode = integer
+    [[graph]]
+        P1 = "a[-P1] & data => a => b1 => b2 & b3 => b4"
+[runtime]
+    [[root]]
+        # pre-script = sleep 5
+    [[FAM]]
+    [[data]]
+    [[b1, b2, b3, b4]]
+        inherit = FAM
+    [[a]]
+        script = """
+           # stall the workflow at cycle 5
+            if (( CYLC_TASK_CYCLE_POINT == 5 )); then
+                false
+            fi
+        """

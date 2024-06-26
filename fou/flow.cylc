@@ -1,0 +1,18 @@
+[scheduling]
+    cycling mode = integer
+    [[graph]]
+        P1 = "poller => FAM"
+[runtime]
+    [[root]]
+        pre-script = sleep 5
+    [[FAM]]
+    [[b1, b2, b3, b4]]
+        inherit = FAM
+    [[poller]]
+        script = """
+           # never succeed at cycle point 2
+            if (( CYLC_TASK_CYCLE_POINT == 2 )); then
+                sleep 3600
+                false
+            fi
+        """

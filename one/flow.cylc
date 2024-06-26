@@ -1,0 +1,13 @@
+[scheduling]
+    [[graph]]
+        R1 = "a => b => c => d"
+[runtime]
+    [[root]]
+        pre-script = sleep 5
+    [[a, b, d]]
+    [[c]]
+        script = """
+            if (( CYLC_TASK_SUBMIT_NUMBER == 1 )); then
+                false
+            fi
+        """
