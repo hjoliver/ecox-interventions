@@ -132,16 +132,32 @@ $ cylc trigger ecox/two b.1
 $ cylc reset ecox/two --state=waiting c_m3.1
 ```
 
-### Cylc 8.3 (now)
+### Cylc 8.3.0 (now)
+
+**WARNING 8.3.0 has a bug that requires manually
+triggering the second task after waiting for the
+first one to finish**
+  https://github.com/cylc/cylc-flow/pull/6186
 
 ```sh
-# 1. trigger task b to start a new flow
-$ cylc trigger ecox/two//1/b --flow=new
+# 1. trigger task b in the original flow
+$ cylc trigger ecox/two//1/b
 
-# 2. set c<m!=3> to succeeded in flow 2
-$ for i in 01 02 04 05 06 07 08 09; do 
-     cylc set ecox/two//1/c_m$i
-  done
+# 2. wait for b to finish
+#    then trigger c_m03 in the original flow
+$ cylc trigger ecox/two//1/m_03
+```
+
+### Cylc 8.3.1 (soon)
+
+```sh
+# 1. set c<m> for m != 3 to succeeded in flow 2
+$ cylc set --flow=2 ecox/two \
+   //1/c_m01 //1/c_m02 //1/c_m04 //1/c_m05 \
+   //1/c_m06 //1/c_m07 //1/c_m08 //1/c_m09
+
+# 2. trigger task b to start the new flow
+$ cylc trigger ecox/two//1/b --flow=new
 ```
 
 #### Explanation
